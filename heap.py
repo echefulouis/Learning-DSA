@@ -8,28 +8,50 @@ class MaxHeap:
         return 2 * index + 2
     def _parent(self,index):
         return (index-1)//2
+    
+    def _sink_down(self, index):
+        max_index = index
+        while True:
+            left_index = self._left_child(index)
+            right_index = self._right_child(index)
+
+            if (left_index < len(self.heap) and 
+                    self.heap[left_index] > self.heap[max_index]):
+                max_index = left_index
+
+            if (right_index < len(self.heap) and 
+                    self.heap[right_index] > self.heap[max_index]):
+                max_index = right_index
+
+            if max_index != index:
+                self._swap(index, max_index)
+                index = max_index
+            else:
+                return
+    
+                
     def swap(self,index1,index2):
         self.heap[index1] , self.heap[index2] = self.heap[index2],self.heap[index1]
         
-    def inser(self,value):
+    def insert(self,value):
         self.heap.append(value)
         #Inititalize current as index of the newly added value in the list
-        currrent = len(self.heap) - 1  
+        current = len(self.heap) - 1  
         
-        while currrent>0 and (self.heap[current] > self.heap[self._parent(currrent)]):
+        while current>0 and (self.heap[current] > self.heap[self._parent(current)]):
             #Swap the two nodes if the child is greater than the parent
-            self.swap(currrent,self._parent(currrent))
+            self.swap(current,self._parent(current))
             #Make current the parents index , moving up
-            currrent = self._parent(currrent)
+            current = self._parent(current)
             
     def remove(self):
         
-         if len(self.heap) == 0:
-             return None
-         if len(self.heap) == 1:
-             return self.heap.pop()
+        if len(self.heap) == 0:
+            return None
+        if len(self.heap) == 1:
+            return self.heap.pop()
          
-         max_value = self.heap[0]
-         self.heap[0]= self.heap.pop()
-         
-         return max_value
+        max_value = self.heap[0]
+        self.heap[0]= self.heap.pop()
+        self._sink_down(0)
+        return max_value
