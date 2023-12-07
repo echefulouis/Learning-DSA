@@ -83,7 +83,10 @@ class BinarySearchTree:
                 current_node = current_node.left
                 return None
             else:
-                
+                sub_tree_min = self.min_value(current_node.right)
+                current_node.value=sub_tree_min
+                #Recursively go and delete that node
+                current_node.right=self.__delete_node(current_node.right,sub_tree_min) 
         return current_node
         
     def r_contains(self,value):
